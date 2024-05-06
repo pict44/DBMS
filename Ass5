@@ -1,0 +1,85 @@
+CREATE DATABASE Ass5;
+
+USE Ass5;
+ 
+
+-- Create Department table
+CREATE TABLE Department (
+    dept_name VARCHAR(50) PRIMARY KEY,
+    building VARCHAR(50),
+    budget DECIMAL(10, 2)
+);
+
+-- Create Instructor table
+CREATE TABLE Instructor (
+    inst_id INT PRIMARY KEY,
+    name VARCHAR(100),
+    salary DECIMAL(10, 2),
+    dept_name VARCHAR(50),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+-- Create Course table
+	CREATE TABLE Course (
+	    course_id INT PRIMARY KEY,
+	    title VARCHAR(100),
+	    credits INT,
+	    dept_name VARCHAR(50),
+	    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+	);
+
+-- Create Teaches table
+CREATE TABLE Teaches (
+    course_id INT,
+    inst_id INT,
+    PRIMARY KEY (course_id, inst_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id),
+    FOREIGN KEY (inst_id) REFERENCES Instructor(inst_id)
+);
+
+-- Insert data into Department table
+INSERT INTO Department (dept_name, building, budget)
+VALUES ('Music', 'Arts Building', 100000),
+       ('Computer Science', 'Science Building', 150000),
+       ('Mathematics', 'Science Building', 120000);
+
+-- Insert data into Instructor table
+INSERT INTO Instructor (inst_id, name, salary, dept_name)
+VALUES (1, 'John Smith', 60000, 'Music'),
+       (2, 'Emily Johnson', 70000, 'Computer Science'),
+       (3, 'Michael Williams', 55000, 'Mathematics'),
+       (4, 'Sarah Brown', 62000, 'Music');
+
+-- Insert data into Course table
+	INSERT INTO Course (course_id, title, credits, dept_name)
+	VALUES (101, 'Introduction to Music Theory', 3, 'Music'),
+	       (102, 'Computer Programming', 4, 'Computer Science'),
+	       (103, 'Calculus I', 4, 'Mathematics'),
+	       (104, 'Advanced Music Composition', 3, 'Music');
+
+-- Insert data into Teaches table
+INSERT INTO Teaches (course_id, inst_id)
+VALUES (101, 1),
+       (102, 2),
+       (103, 3),
+       (104, 4);
+
+SELECT name
+FROM Instructor
+WHERE dept_name = 'Music' AND salary > 50000;
+
+SELECT *
+FROM Instructor
+WHERE inst_id IN (SELECT inst_id FROM Teaches);
+
+SELECT Instructor.name, Course.title
+FROM Instructor
+INNER JOIN Teaches ON Instructor.inst_id = Teaches.inst_id
+INNER JOIN Course ON Teaches.course_id = Course.course_id;
+
+
+SELECT *
+FROM Instructor
+ORDER BY name DESC;
+
+

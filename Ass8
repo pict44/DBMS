@@ -1,0 +1,78 @@
+CREATE DATABASE Ass8;
+
+USE Ass8;
+ 
+
+
+-- Create the Department table
+CREATE TABLE Department (
+    dept_name VARCHAR(50) PRIMARY KEY,
+    building VARCHAR(50),
+    budget DECIMAL(10, 2)
+);
+
+-- Create the Student table
+CREATE TABLE Student (
+    sid INT PRIMARY KEY,
+    sname VARCHAR(50),
+    tot_credits INT,
+    dept_name VARCHAR(50),
+    grade VARCHAR(2),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+-- Create the Course table
+CREATE TABLE Course (
+    course_id INT PRIMARY KEY,
+    title VARCHAR(100),
+    credits INT,
+    dept_name VARCHAR(50),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+-- Create the Takes table
+CREATE TABLE Takes (
+    sid INT,
+    course_id INT,
+    PRIMARY KEY (sid, course_id),
+    FOREIGN KEY (sid) REFERENCES Student(sid),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+-- Insert data into the Department table
+	INSERT INTO Department (dept_name, building, budget)
+	VALUES ('Computer', 'Smith Hall', 100000),
+	       ('Mathematics', 'Jones Building', 80000),
+	       ('Physics', 'Newton Hall', 90000);
+
+-- Insert data into the Student table
+INSERT INTO Student (sid, sname, tot_credits, dept_name, grade)
+VALUES (1, 'Alice', 120, 'Computer', 'A'),
+       (2, 'Bob', 90, 'Mathematics', 'B'),
+       (3, 'Charlie', 110, 'Physics', 'B+');
+
+-- Insert data into the Course table
+INSERT INTO Course (course_id, title, credits, dept_name)
+VALUES (101, 'Introduction to Programming', 3, 'Computer'),
+       (102, 'Calculus I', 4, 'Mathematics'),
+       (103, 'Mechanics', 3, 'Physics');
+
+-- Insert data into the Takes table
+INSERT INTO Takes (sid, course_id)
+VALUES (1, 101),
+       (2, 102),
+       (3, 103);
+
+SELECT DISTINCT sname
+FROM Student;
+
+
+SELECT *
+FROM Student
+WHERE dept_name = 'Computer';
+
+
+SELECT dept_name
+FROM Department
+WHERE dept_name LIKE '%a%';
+

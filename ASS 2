@@ -1,0 +1,89 @@
+	CREATE TABLE Department (
+	    dept_name VARCHAR(50) PRIMARY KEY,
+	    building VARCHAR(50),
+	    budget DECIMAL(10, 2)
+	);
+
+	CREATE TABLE Instructor (
+	    inst_id INT PRIMARY KEY,
+	    name VARCHAR(50),
+	    salary DECIMAL(10, 2),
+	    dept_name VARCHAR(50),
+	    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+	);
+
+CREATE TABLE Course (
+    course_id INT PRIMARY KEY,
+    title VARCHAR(100),
+    credits INT,
+    dept_name VARCHAR(50),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+CREATE TABLE Teaches (
+    course_id INT,
+    inst_id INT,
+    PRIMARY KEY (course_id, inst_id),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id),
+    FOREIGN KEY (inst_id) REFERENCES Instructor(inst_id)
+);
+
+-- Inserting into Department table
+INSERT INTO Department (dept_name, building, budget) VALUES
+('Computer', 'Taylor Hall', 100000),
+('Mathematics', 'Smith Hall', 80000),
+('Physics', 'Jones Hall', 90000);
+
+-- Inserting into Instructor table
+INSERT INTO Instructor (inst_id, name, salary, dept_name) VALUES
+(101, 'John Doe', 75000, 'Computer'),
+(102, 'Jane Smith', 80000, 'Mathematics'),
+(103, 'Robert Johnson', 72000, 'Computer'),
+(104, 'Mary Brown', 85000, 'Physics'),
+(105, 'David Lee', 68000, 'Computer');
+
+-- Inserting into Course table
+INSERT INTO Course (course_id, title, credits, dept_name) VALUES
+(1, 'Introduction to Programming', 3, 'Computer'),
+(2, 'Calculus I', 4, 'Mathematics'),
+(3, 'Mechanics', 3, 'Physics'),
+(4, 'Data Structures', 3, 'Computer');
+
+-- Inserting into Teaches table
+INSERT INTO Teaches (course_id, inst_id) VALUES
+(1, 101),
+(2, 102),
+(3, 104),
+(4, 101),
+(4, 103);
+
+
+SELECT name 
+FROM Instructor 
+WHERE dept_name = 'Computer' AND salary > 70000;
+
+
+CREATE VIEW CourseInfo AS
+SELECT c.course_id, c.title, c.credits, c.dept_name, i.name AS instructor_name
+FROM Course c
+INNER JOIN Teaches t ON c.course_id = t.course_id
+INNER JOIN Instructor i ON t.inst_id = i.inst_id;
+
+SELECT * FROM CourseInfo;
+
+SELECT name 
+FROM Instructor 
+WHERE LENGTH(name) = 5;
+
+
+-- Joining Instructor and Department tables to get the department name of each instructor
+SELECT i.name AS instructor_name, d.dept_name
+FROM Instructor i
+INNER JOIN Department d ON i.dept_name = d.dept_name;
+
+-- Joining Course and Teaches tables to get courses and the instructors teaching them
+SELECT c.title AS course_title, i.name AS instructor_name
+FROM Course c
+INNER JOIN Teaches t ON c.course_id = t.course_id
+INNER JOIN Instructor i ON t.inst_id = i.inst_id;
+

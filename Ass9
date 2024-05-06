@@ -1,0 +1,67 @@
+CREATE DATABASE School;
+
+USE School;
+
+CREATE TABLE Student (
+    RollNo INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Address VARCHAR(100)
+);
+
+CREATE TABLE Subject (
+    SubCode INT PRIMARY KEY,
+    SubName VARCHAR(50)
+);
+
+CREATE TABLE Marks (
+    RollNo INT,
+    SubCode INT,
+    Marks INT,
+    FOREIGN KEY (RollNo) REFERENCES Student(RollNo),
+    FOREIGN KEY (SubCode) REFERENCES Subject(SubCode),
+    PRIMARY KEY (RollNo, SubCode)
+);
+
+
+INSERT INTO Student (RollNo, Name, Address) VALUES
+(1, 'John Doe', '123 Main St'),
+(2, 'Jane Smith', '456 Elm St'),
+(3, 'Alice Johnson', '789 Oak St');
+
+
+INSERT INTO Subject (SubCode, SubName) VALUES
+(1, 'DBMS'),
+(2, 'OS'),
+(3, 'TOC');
+
+INSERT INTO Marks (RollNo, SubCode, Marks) VALUES
+(1, 1, 85),
+(1, 2, 75),
+(1, 3, 90),
+(2, 1, 70),
+(2, 2, 65),
+(2, 3, 80),
+(3, 1, 60),
+(3, 2, 55),
+(3, 3, 70);
+
+
+SELECT s.Name, AVG(m.Marks) AS AverageMarks
+FROM Student s
+INNER JOIN Marks m ON s.RollNo = m.RollNo
+GROUP BY s.RollNo, s.Name;
+
+SELECT COUNT(*) AS FailedStudentsCount
+FROM Marks
+WHERE SubCode = (SELECT SubCode FROM Subject WHERE SubName = 'DBMS') AND Marks < 40;
+
+
+SELECT COUNT(*) AS PassedStudentsCount
+FROM Marks
+WHERE SubCode = (SELECT SubCode FROM Subject WHERE SubName = 'OS') AND Marks >= 40;
+
+
+SELECT MAX(Marks) AS MaxMarks
+FROM Marks
+WHERE SubCode = (SELECT SubCode FROM Subject WHERE SubName = 'TOC');
+

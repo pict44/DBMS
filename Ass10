@@ -1,0 +1,70 @@
+-- Create the Inventory database
+CREATE DATABASE Inventory;
+
+-- Switch to the Inventory database
+USE Inventory;
+
+-- Create the Supplier table
+CREATE TABLE Supplier (
+    Sid INT PRIMARY KEY,
+    Sname VARCHAR(255),
+    Address VARCHAR(255)
+);
+
+-- Create the Parts table
+CREATE TABLE Parts (
+    Pid INT PRIMARY KEY,
+    Pname VARCHAR(255),
+    Color VARCHAR(50)
+);
+
+-- Create the Catalog table
+CREATE TABLE Catalog (
+    Sid INT,
+    Pid INT,
+    Cost DECIMAL(10, 2),
+    FOREIGN KEY (Sid) REFERENCES Supplier(Sid),
+    FOREIGN KEY (Pid) REFERENCES Parts(Pid)
+);
+
+-- Insert data into the Supplier table
+INSERT INTO Supplier (Sid, Sname, Address) VALUES
+(1, 'ABC Suppliers', '123 Main Street, City'),
+(2, 'XYZ Suppliers', '456 Park Avenue, Town'),
+(3, 'PQR Suppliers', '789 Oak Road, Village');
+
+-- Insert data into the Parts table
+INSERT INTO Parts (Pid, Pname, Color) VALUES
+(101, 'Widget A', 'Red'),
+(102, 'Widget B', 'Blue'),
+(103, 'Widget C', 'Green');
+
+-- Insert data into the Catalog table
+INSERT INTO Catalog (Sid, Pid, Cost) VALUES
+(1, 101, 200),
+(1, 102, 300),
+(2, 102, 250),
+(2, 103, 280),
+(3, 101, 220),
+(3, 103, 270);
+
+SELECT DISTINCT Supplier.Sname
+FROM Supplier
+JOIN Catalog ON Supplier.Sid = Catalog.Sid
+JOIN Parts ON Catalog.Pid = Parts.Pid
+WHERE Parts.color = 'red';
+
+SELECT Parts.Pname
+FROM Parts
+JOIN Catalog ON Parts.Pid = Catalog.Pid
+WHERE Catalog.cost > 250;
+
+SELECT Parts.Pname
+FROM Parts
+WHERE Parts.color = 'green';
+
+SELECT Supplier.Sname, COUNT(Catalog.Pid) AS NumPartsSupplied
+FROM Supplier
+LEFT JOIN Catalog ON Supplier.Sid = Catalog.Sid
+GROUP BY Supplier.Sname;
+

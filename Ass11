@@ -1,0 +1,84 @@
+
+CREATE DATABASE Ass11;
+
+USE Ass11;
+ 
+
+
+
+
+-- Create Department table
+CREATE TABLE Department (
+    dept_name VARCHAR(50) PRIMARY KEY,
+    building VARCHAR(50),
+    budget DECIMAL(10,2)
+);
+
+-- Create Student table
+CREATE TABLE Student (
+    sid INT PRIMARY KEY,
+    sname VARCHAR(100),
+    tot_credits INT,
+    dept_name VARCHAR(50),
+    grade VARCHAR(2),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+-- Create Course table
+CREATE TABLE Course (
+    course_id INT PRIMARY KEY,
+    title VARCHAR(100),
+    credits INT,
+    dept_name VARCHAR(50),
+    FOREIGN KEY (dept_name) REFERENCES Department(dept_name)
+);
+
+-- Create Takes table
+CREATE TABLE Takes (
+    sid INT,
+    course_id INT,
+    PRIMARY KEY (sid, course_id),
+    FOREIGN KEY (sid) REFERENCES Student(sid),
+    FOREIGN KEY (course_id) REFERENCES Course(course_id)
+);
+
+-- Insert data into Department table
+INSERT INTO Department (dept_name, building, budget) VALUES
+('Computer Science', 'Main Building', 1500000),
+('Mechanical Engineering', 'Engineering Block A', 1200000),
+('Electronics and Communication', 'ECE Block', 1000000);
+
+-- Insert data into Student table
+INSERT INTO Student (sid, sname, tot_credits, dept_name, grade) VALUES
+(101, 'Rajesh Sharma', 110, 'Computer Science', 'A'),
+(102, 'Priya Patel', 95, 'Electronics and Communication', 'B+'),
+(103, 'Amit Singh', 100, 'Mechanical Engineering', 'A-');
+
+-- Insert data into Course table
+INSERT INTO Course (course_id, title, credits, dept_name) VALUES
+(201, 'Data Structures and Algorithms', 4, 'Computer Science'),
+(202, 'Digital Electronics', 3, 'Electronics and Communication'),
+(203, 'Thermodynamics', 4, 'Mechanical Engineering');
+
+-- Insert data into Takes table
+INSERT INTO Takes (sid, course_id) VALUES
+(101, 201),
+(102, 202),
+(103, 203),
+(101, 202),
+(103, 201);
+
+SELECT sname 
+FROM Student;
+
+
+SELECT *
+FROM Student
+WHERE dept_name = 'Computer Science';
+
+
+SELECT dept_name 
+FROM Department
+WHERE dept_name LIKE '%a%';
+
+

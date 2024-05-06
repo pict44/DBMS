@@ -1,0 +1,74 @@
+CREATE DATABASE ASS12;
+
+
+USE ASS12;
+
+
+
+-- Create Supplier table
+CREATE TABLE Supplier (
+    Sid INT PRIMARY KEY,
+    Sname VARCHAR(255),
+    address VARCHAR(255)
+);
+
+-- Create Parts table
+CREATE TABLE Parts (
+    Pid INT PRIMARY KEY,
+    Pname VARCHAR(255),
+    color VARCHAR(50)
+);
+
+-- Create Catalog table with foreign keys referencing Supplier and Parts tables
+CREATE TABLE Catalog (
+    Sid INT,
+    Pid INT,
+    cost DECIMAL(10,2),
+    FOREIGN KEY (Sid) REFERENCES Supplier(Sid),
+    FOREIGN KEY (Pid) REFERENCES Parts(Pid)
+);
+
+-- Inserting data into the Supplier table
+INSERT INTO Supplier (Sid, Sname, address)
+VALUES 
+    (1, 'Ramesh Traders', 'Mumbai'),
+    (2, 'Suresh Enterprises', 'Delhi'),
+    (3, 'Rajesh Industries', 'Bangalore');
+
+-- Inserting data into the Parts table
+INSERT INTO Parts (Pid, Pname, color)
+VALUES 
+    (101, 'Bolt', 'red'),
+    (102, 'Nut', 'green'),
+    (103, 'Screw', 'blue'),
+    (104, 'Washer', 'red');
+
+-- Inserting data into the Catalog table
+INSERT INTO Catalog (Sid, Pid, cost)
+VALUES 
+    (1, 101, 10.50),
+    (1, 102, 15.75),
+    (2, 103, 8.90),
+    (3, 104, 12.25);
+
+SELECT DISTINCT Supplier.Sname
+FROM Supplier
+INNER JOIN Catalog ON Supplier.Sid = Catalog.Sid
+INNER JOIN Parts ON Catalog.Pid = Parts.Pid
+WHERE Parts.color = 'red';
+
+SELECT Pname
+FROM Parts
+INNER JOIN Catalog ON Parts.Pid = Catalog.Pid
+WHERE Catalog.cost > 250;
+
+SELECT Pname
+FROM Parts
+WHERE color = 'green';
+
+SELECT Supplier.Sid, Supplier.Sname, COUNT(Catalog.Pid) AS NumOfPartsSupplied
+FROM Supplier
+LEFT JOIN Catalog ON Supplier.Sid = Catalog.Sid
+GROUP BY Supplier.Sid, Supplier.Sname;
+
+

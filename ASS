@@ -9,15 +9,13 @@ Teaches (course_id, inst_id)
 •	Execute join operations.
 
 
-
--- Create Department table
 CREATE TABLE Department (
     dept_name VARCHAR(50),
     building VARCHAR(50),
     budget int
 );
 
--- Create Instructor table
+
 CREATE TABLE Instructor (
     inst_id int,
     name VARCHAR(50),
@@ -25,7 +23,7 @@ CREATE TABLE Instructor (
     dept_name VARCHAR(50)
 );
 
--- Create Course table
+
 CREATE TABLE Course (
     course_id int,
     title VARCHAR(100),
@@ -33,33 +31,32 @@ CREATE TABLE Course (
     dept_name VARCHAR(50)
 );
 
--- Create Teaches table
+
 CREATE TABLE Teaches (
     course_id int,
     inst_id int
 );
 
--- Insert sample data into Department table
 INSERT INTO Department VALUES ('Computer Science', 'New Building', 100000);
 INSERT INTO Department VALUES ('Mathematics', 'New Building', 80000);
 INSERT INTO Department VALUES ('Physics', 'Old Building', 120000);
 
--- Insert sample data into Instructor table
+
 INSERT INTO Instructor VALUES (101, 'Jay', 60000, 'Computer Science');
 INSERT INTO Instructor VALUES (102, 'Parth', 55000, 'Mathematics');
 INSERT INTO Instructor VALUES (103, 'Ram ', 62000, 'Physics');
 
--- Insert sample data into Course table
+
 INSERT INTO Course VALUES (1, 'Database Management', 3, 'Computer Science');
 INSERT INTO Course VALUES (2, 'Calculus I', 4, 'Mathematics');
 INSERT INTO Course VALUES (3, 'Mechanics', 3, 'Physics');
 
--- Insert sample data into Teaches table
+
 INSERT INTO Teaches VALUES (1, 101);
 INSERT INTO Teaches VALUES (2, 102);
 INSERT INTO Teaches VALUES (3, 103);
 
--- Create view to find out only instructors who have taught some course
+
 CREATE VIEW InstructorsWithCourses AS
 SELECT DISTINCT i.inst_id, i.name, i.salary, i.dept_name
 FROM Instructor i
@@ -68,23 +65,23 @@ JOIN Teaches t ON i.inst_id = t.inst_id;
 SELECT * FROM InstructorsWithCourses;
 
 
--- Query 1: Find the names of all departments whose name includes substring “i”
+
 SELECT dept_name
 FROM Department
 WHERE dept_name LIKE '%i%';
 
--- Query 2: Find titles along with department where department must end with “y”
+
 SELECT c.title, c.dept_name
 FROM Course c
 JOIN Department d ON c.dept_name = d.dept_name
 WHERE d.dept_name LIKE '%y';
 
--- Query 3a: Retrieve instructors along with their department information
+
 SELECT i.inst_id, i.name AS instructor_name, i.salary, d.dept_name, d.building, d.budget
 FROM Instructor i
 JOIN Department d ON i.dept_name = d.dept_name;
 
--- Query 3b: Retrieve courses along with their instructors
+
 SELECT c.course_id, c.title AS course_title, c.credits, c.dept_name, i.name AS instructor_name
 FROM Course c
 JOIN Teaches t ON c.course_id = t.course_id
